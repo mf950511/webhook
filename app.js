@@ -18,20 +18,20 @@ handler.on('push', function (event) {
   console.log('Received a push event for %s to %s',
     event.payload.repository.name,
     event.payload.ref)
-    try {
-      const s = spawn('sh', ['./sh/gatsby-blog.sh'], {
-        cwd: `../${e.payload.repository.name}`
-      })
-      s.stdout.on('data', (data) => {
-        console.log(`${e.payload.repository.name}: ${data}`);
-      })
-      s.stderr.on('data', (data) => {
-        console.log(`${e.payload.repository.name}: ${data}`);
-      });
-      console.log(e.payload.repository.name, 'has rebuild');
-      } catch (e) {
-          console.log(e)
-      }
+    // try {
+    //   const s = spawn('sh', ['./sh/gatsby-blog.sh'], {
+    //     cwd: `../${e.payload.repository.name}`
+    //   })
+    //   s.stdout.on('data', (data) => {
+    //     console.log(`${e.payload.repository.name}: ${data}`);
+    //   })
+    //   s.stderr.on('data', (data) => {
+    //     console.log(`${e.payload.repository.name}: ${data}`);
+    //   });
+    //   console.log(e.payload.repository.name, 'has rebuild');
+    //   } catch (e) {
+    //       console.log(e)
+    //   }
 })
 
 handler.on('issues', function (event) {
