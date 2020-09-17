@@ -1,7 +1,8 @@
 const http = require('http')
-const createHandler = require('github-webhook-handler')
+const createHandler = require('node-github-webhook')
 const spawn = require('child_process').spawn
-const handlerOpts = [
+
+var handler = createHandler([
   { 
     path: '/webhook/gatsby-blog', 
     secret: 'gatsby-blog' 
@@ -14,31 +15,16 @@ const handlerOpts = [
     path: '/webhook/react-admin-node', 
     secret: 'react-admin-node' 
   }
-]
-const handler = generaterHandler(handlerOpts)
-
-
-function generaterHandler(handlerOpts) {
-  var handlers = handlerOpts.reduce(function(hs, opts) {
-    hs[opts.path] = createHandler(opts)
-    return hs
-  }, {})
-
-  return http.createServer(function(req, res) {
-    var handler = handlers[req.url]
-    handler(req, res, function(err) {
-      res.statusCode = 404
-      res.end('no such location')
-    })
-  }).listen(7777)
-}
+])
 
 http.createServer(function (req, res) {
-  handler(req, res, function (err) {
-    res.statusCode = 404
-    res.end('no such location')
-  })
+handler(req, res, function (err) {
+  res.statusCode = 404
+  res.end('no such location')
+})
 }).listen(7777)
+
+
 
 handler.on('error', function (err) {
   console.error('Error:', err.message)

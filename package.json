@@ -8,8 +8,7 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {},
-  "devDependencies": {
-    "github-webhook-handler": "^1.0.0"
+  "dependencies": {
+    "node-github-webhook": "^1.0.7"
   }
 }
