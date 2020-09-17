@@ -1,7 +1,7 @@
 const http = require('http')
 const createHandler = require('github-webhook-handler')
 const spawn = require('child_process').spawn
-const handler = createHandler([
+const handlerOpts = [
   { 
     path: '/webhook/gatsby-blog', 
     secret: 'gatsby-blog' 
@@ -14,7 +14,24 @@ const handler = createHandler([
     path: '/webhook/react-admin-node', 
     secret: 'react-admin-node' 
   }
-])
+]
+const handler = generaterHandler(handlerOpts)
+
+
+function generaterHandler(handlerOpts) {
+  var handlers = handlerOpts.reduce(function(hs, opts) {
+    hs[opts.path] = createHandler(opts)
+    return hs
+  }, {})
+
+  return http.createServer(function(req, res) {
+    var handler = handlers[req.url]
+    handler(req, res, function(err) {
+      res.statusCode = 404
+      res.end('no such location')
+    })
+  }).listen(7777)
+}
 
 http.createServer(function (req, res) {
   handler(req, res, function (err) {
@@ -28,11 +45,8 @@ handler.on('error', function (err) {
 })
 
 handler.on('push', function (event) {
-  console.log('Received a push event for %s to %s',
-    event.payload.repository.name,
-    event.payload.ref)
     const { path, secret } = event
-    console.log(3333333, path, secret)
+    console.log(3333333, path, secret, event)
     // switch(path) {
     //   case '/webhook/gatsby-blog':
     //     runCmd('sh', [`./sh/${ secret }.sh`, event.payload.repository.name], function (text) { console.log(text) })
