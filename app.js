@@ -31,33 +31,21 @@ handler.on('error', function (err) {
 })
 
 handler.on('push', function (event) {
-    const { path, secret } = event
-    console.log(3333333, path, secret, event)
-    // switch(path) {
-    //   case '/webhook/gatsby-blog':
-    //     runCmd('sh', [`./sh/${ secret }.sh`, event.payload.repository.name], function (text) { console.log(text) })
-    //     break
-    //   case '/webhook/react-admin':
-    //     break
-    //   case '/webhook/react-admin-node':
-    //     break
-    //   default:
-    //     break
-    // }
-    // try {
-    //   const s = spawn('sh', ['./sh/gatsby-blog.sh'], {
-    //     cwd: `../${e.payload.repository.name}`
-    //   })
-    //   s.stdout.on('data', (data) => {
-    //     console.log(`${e.payload.repository.name}: ${data}`);
-    //   })
-    //   s.stderr.on('data', (data) => {
-    //     console.log(`${e.payload.repository.name}: ${data}`);
-    //   });
-    //   console.log(e.payload.repository.name, 'has rebuild');
-    //   } catch (e) {
-    //       console.log(e)
-    //   }
+    const { path } = event
+    console.log('path', path)
+    switch(path) {
+      case '/webhook/gatsby-blog':
+        runCmd('sh', [`./sh/gatsby-blog.sh`, event.payload.repository.name], function (text) { console.log(text) })
+        break
+      case '/webhook/react-admin':
+        runCmd('sh', [`./sh/reach-admin.sh`, event.payload.repository.name], function (text) { console.log(text) })
+        break
+      case '/webhook/react-admin-node':
+        runCmd('sh', [`./sh/react-admin-node.sh`, event.payload.repository.name], function (text) { console.log(text) })
+        break
+      default:
+        break
+    }
 })
 
 handler.on('issues', function (event) {
@@ -67,3 +55,14 @@ handler.on('issues', function (event) {
     event.payload.issue.number,
     event.payload.issue.title)
 })
+
+function runCmd (cmd, args, callback) {
+  const child = spawn(cmd, args)
+  let resp = ''
+  child.stdout.on('data', function (buffer) {
+    resp += buffer.toString()
+  })
+  child.stdout.on('end', function () {
+    callback(resp)
+  })
+}
