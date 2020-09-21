@@ -1,8 +1,12 @@
-const http = require('http')
+const path = require('path')
 const createHandler = require('node-github-webhook')
 const spawn = require('child_process').spawn
+const Koa = require('koa')
+const koaBody = require('koa-body')
+const serve = require('koa-static')
+const app = new Koa()
 
-var handler = createHandler([
+const handler = createHandler([
   { 
     path: '/webhook/gatsby-blog', 
     secret: 'gatsby-blog' 
@@ -16,15 +20,6 @@ var handler = createHandler([
     secret: 'react-admin-node' 
   }
 ])
-
-http.createServer(function (req, res) {
-handler(req, res, function (err) {
-  res.statusCode = 404
-  res.end('no such location')
-})
-}).listen(7777)
-
-
 
 handler.on('error', function (err) {
   console.error('Error:', err.message)
@@ -66,3 +61,22 @@ function runCmd (cmd, args, callback) {
     callback(resp)
   })
 }
+
+
+app.
+use(koaBody({ "formLimit":"5mb", "jsonLimit":"5mb", "textLimit":"5mb" })).
+use(serve(path.resolve(__dirname, '../gatsby-blog/public/static'))).
+use(async (ctx, next) => {
+  handler(ctx.req, ctx.res, function (err) {
+    ctx.res.statusCode = 404
+    ctx.res.end('no such location')
+  })
+  await next()
+}).listen(7777)
+
+
+
+
+
+
+

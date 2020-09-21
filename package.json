@@ -9,6 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "koa": "^2.13.0",
+    "koa-body": "^4.2.0",
+    "koa-static": "^5.0.0",
     "node-github-webhook": "^1.0.7"
   }
 }
