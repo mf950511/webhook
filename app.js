@@ -4,6 +4,7 @@ const spawn = require('child_process').spawn
 const Koa = require('koa')
 const koaBody = require('koa-body')
 const serve = require('koa-static')
+const { resolve } = require('path')
 const app = new Koa()
 
 const handler = createHandler([
@@ -62,16 +63,20 @@ function runCmd (cmd, args, callback) {
   })
 }
 
+const test = (ctx) => {
+  return new Promise((res, rej) => {
+    handler(ctx.req, ctx.res, (err) => {
+      res(true)
+    })
+  })
+}
+
 const handlerReturn = () => {
   return async (ctx, next) => {
-    await new Promise((resolve, reject) => {
-      handler(ctx.req, ctx.res, (err) => {
-        ctx.res.statusCode = 404
-        ctx.res.end('no such location')
-        reject(err)
-      })
-      resolve()
-    })
+    const a = await test(ctx)
+    if(a) {
+      ctx.body = 'no such location'
+    }
   }
   
 }
