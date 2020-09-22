@@ -68,8 +68,7 @@ use(koaBody({ "formLimit":"5mb", "jsonLimit":"5mb", "textLimit":"5mb" })).
 use(serve(path.resolve(__dirname, '../gatsby-blog/public/static'))).
 use(async (ctx, next) => {
   handler(ctx.req, ctx.res, function (err) {
-    ctx.res.statusCode = 404
-    ctx.res.end('no such location')
+    ctx.body = 'no such location'
   })
   await next()
 }).listen(7777)
