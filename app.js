@@ -66,11 +66,12 @@ const handlerReturn = () => {
   return async (ctx, next) => {
     await new Promise((resolve, reject) => {
       handler(ctx.req, ctx.res, (err) => {
+        ctx.res.statusCode = 404
+        ctx.res.end('no such location')
         reject(err)
       })
       resolve()
     })
-    await next()
   }
   
 }
@@ -78,10 +79,7 @@ const handlerReturn = () => {
 app.
 use(koaBody({ "formLimit":"5mb", "jsonLimit":"5mb", "textLimit":"5mb" })).
 use(serve(path.resolve(__dirname, '../gatsby-blog/public/static'))).
-use(handlerReturn()).
-use(async ctx => {
-  ctx.body = 'no such loaction'
-})
+use(handlerReturn())
 .listen(7777)
 
 
