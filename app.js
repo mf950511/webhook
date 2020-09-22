@@ -1,3 +1,4 @@
+const http = require('http')
 const path = require('path')
 const createHandler = require('node-github-webhook')
 const spawn = require('child_process').spawn
@@ -21,6 +22,13 @@ const handler = createHandler([
     secret: 'react-admin-node' 
   }
 ])
+
+http.createServer(function (req, res) {
+  handler(req, res, function (err) {
+    res.statusCode = 404
+    res.end('no such location')
+  })
+}).listen(7777)
 
 handler.on('error', function (err) {
   console.error('Error:', err.message)
@@ -63,29 +71,11 @@ function runCmd (cmd, args, callback) {
   })
 }
 
-const test = (ctx) => {
-  return new Promise((res, rej) => {
-    handler(ctx.req, ctx.res, (err) => {
-      res(true)
-    })
-  })
-}
-
-const handlerReturn = () => {
-  return async (ctx, next) => {
-    const a = await test(ctx)
-    if(a) {
-      ctx.body = 'no such location'
-    }
-  }
-  
-}
 
 app.
 use(koaBody({ "formLimit":"5mb", "jsonLimit":"5mb", "textLimit":"5mb" })).
-use(serve(path.resolve(__dirname, '../gatsby-blog/public/static'))).
-use(handlerReturn())
-.listen(7777)
+use(serve(path.resolve(__dirname, '../gatsby-blog/public/static')))
+.listen(7778)
 
 
 
