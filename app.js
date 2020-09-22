@@ -70,7 +70,7 @@ use(async (ctx, next) => {
   handler(ctx.req, ctx.res, function (err) {
     ctx.body = 'no such location'
   })
-  await next()
+  // await next()
 }).listen(7777)
 
 
