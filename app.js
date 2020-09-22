@@ -74,8 +74,9 @@ function runCmd (cmd, args, callback) {
 
 app.
 use(koaBody({ "formLimit":"5mb", "jsonLimit":"5mb", "textLimit":"5mb" })).
-use(serve(path.resolve(__dirname, '../gatsby-blog/public/static')))
-.listen(7778)
+use(serve(path.resolve(__dirname, '../gatsby-blog/public/static'))).
+use(serve(path.resolve(__dirname, '../gatsby-blog/public'))).
+listen(7778)
 
 
 
