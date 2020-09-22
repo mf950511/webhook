@@ -62,16 +62,23 @@ function runCmd (cmd, args, callback) {
   })
 }
 
-const handlerReturn = async (ctx, next) => {
-  handler(ctx.req, ctx.res, (err) => {
-  })
-  await next()
+const handlerReturn = () => {
+  return async (ctx, next) => {
+    await new Promise((resolve, reject) => {
+      handler(ctx.req, ctx.res, (err) => {
+        reject(err)
+      })
+      resolve()
+    })
+    await next()
+  }
+  
 }
 
 app.
 use(koaBody({ "formLimit":"5mb", "jsonLimit":"5mb", "textLimit":"5mb" })).
 use(serve(path.resolve(__dirname, '../gatsby-blog/public/static'))).
-use(handlerReturn).
+use(handlerReturn()).
 use(async ctx => {
   ctx.body = 'no such loaction'
 })
