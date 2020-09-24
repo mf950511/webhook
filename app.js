@@ -76,6 +76,7 @@ app.
 use(koaBody({ "formLimit":"5mb", "jsonLimit":"5mb", "textLimit":"5mb" })).
 use(serve(path.resolve(__dirname, '../../website/blog/static'))).
 use(serve(path.resolve(__dirname, '../../website/react-admin'))).
+use(serve(path.resolve(__dirname, '../../website'))).
 listen(7778)
 
 
