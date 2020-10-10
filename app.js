@@ -20,6 +20,10 @@ const handler = createHandler([
   { 
     path: '/webhook/react-admin-node', 
     secret: 'react-admin-node' 
+  },
+  { 
+    path: '/webhook/website-home', 
+    secret: 'website-home' 
   }
 ])
 
@@ -46,6 +50,9 @@ handler.on('push', function (event) {
         break
       case '/webhook/react-admin-node':
         runCmd('sh', [`./sh/react-admin-node.sh`, event.payload.repository.name], function (text) { console.log(text) })
+        break
+      case '/webhook/website-home':
+        runCmd('sh', [`./sh/website-home.sh`, event.payload.repository.name], function (text) { console.log(text) })
         break
       default:
         break

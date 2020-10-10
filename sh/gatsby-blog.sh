@@ -1,4 +1,4 @@
 cd /var/www/project/gatsby-blog
 git pull
-yarn
-yarn run build
+rm -rf /var/www/website/blog
+mv /var/www/project/gatsby-blog/public /var/www/website/blog
