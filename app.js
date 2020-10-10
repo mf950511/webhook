@@ -24,6 +24,10 @@ const handler = createHandler([
   { 
     path: '/webhook/website-home', 
     secret: 'website-home' 
+  },
+  { 
+    path: '/webhook/webhook', 
+    secret: 'webhook' 
   }
 ])
 
