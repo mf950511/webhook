@@ -58,6 +58,9 @@ handler.on('push', function (event) {
       case '/webhook/website-home':
         runCmd('sh', [`./sh/website-home.sh`, event.payload.repository.name], function (text) { console.log(text) })
         break
+      case '/webhook/webhook':
+        runCmd('sh', [`./sh/webhook.sh`, event.payload.repository.name], function (text) { console.log(text) })
+        break
       default:
         break
     }
